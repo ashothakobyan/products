@@ -1,10 +1,11 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import styles from "./Checkout.module.css";
 import { LoadingIcon } from "./Icons";
 import { getProducts } from "./dataService";
 import Product from "./components/product/Product";
 
 import { ProductsContext } from "./slicer/Context";
+import OrderedProductsWrapper from "./components/orderedProducts/orderProductsWrapper/OrderedProductsWrapper";
 
 // You are provided with an incomplete <Checkout /> component.
 // You are not allowed to add any additional HTML elements.
@@ -23,8 +24,14 @@ import { ProductsContext } from "./slicer/Context";
 //  - All dollar amounts should be displayed to 2 decimal places
 
 const Checkout = () => {
-  const { showLoadingState, changeLoadingState, setProducts, products } =
-    useContext(ProductsContext);
+  const {
+    showLoadingState,
+    changeLoadingState,
+    setProducts,
+    products,
+    addOrder,
+    removeOrder,
+  } = useContext(ProductsContext);
 
   useEffect(() => {
     getProducts().then((res) => {
@@ -55,23 +62,28 @@ const Checkout = () => {
           </thead>
           <tbody>
             {products.length
-              ? products.map((product) => (
+              ? products.map((product, index) => (
                   <Product
                     key={product.id}
+                    index={index}
                     id={product.id}
-                    name={product.nam}
+                    name={product.name}
                     availableCount={product.availableCount}
                     price={product.price}
                     orderedQuantity={product.orderedQuantity}
                     total={product.total}
+                    removeButtonState={product.removeButtonState}
+                    addButtonState={product.addButtonState}
+                    addOrder={addOrder}
+                    removeOrder={removeOrder}
                   />
                 ))
               : null}
           </tbody>
         </table>
         <h2>Order summary</h2>
-        <p>Discount: $ </p>
-        <p>Total: $ </p>
+
+        <OrderedProductsWrapper />
       </main>
     </div>
   );

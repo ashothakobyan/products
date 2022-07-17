@@ -1,7 +1,6 @@
 import { useReducer } from "react";
 import "./App.css";
 import Checkout from "./Checkout";
-import { getProducts } from "./dataService";
 import { initialState, ProductsContext } from "./slicer/Context";
 import { reducer } from "./slicer/Store";
 
@@ -10,7 +9,8 @@ function App() {
   const value = {
     products: state.products,
     showLoadingState: state.showLoadingState,
-    orederedProducts: state.orederedProducts,
+    orderedProducts: state.orderedProducts,
+    totalPrice: state.totalPrice,
     changeLoadingState: () => {
       dispatch({
         type: "CHANGE_LOADING_STATE",
@@ -20,6 +20,21 @@ function App() {
       dispatch({
         type: "SET_PRODUCTS",
         products: products,
+      });
+    },
+    addOrder: (id, index, price) => {
+      dispatch({
+        type: "ADD_ORDER",
+        id: id,
+        index: index,
+        price: price,
+      });
+    },
+    removeOrder: (id, price) => {
+      dispatch({
+        type: "REMOVE_ORDER",
+        id: id,
+        price,
       });
     },
   };
